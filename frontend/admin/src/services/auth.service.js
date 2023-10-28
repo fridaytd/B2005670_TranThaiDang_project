@@ -25,7 +25,9 @@ class AuthService {
     }
 
     async refreshToken(refreshToken) {
-        return (await this.api.post('/refresh', refreshToken)).data
+        return (await this.api.post('/refresh', {
+            refreshToken: refreshToken
+        })).data
     }
 }
 

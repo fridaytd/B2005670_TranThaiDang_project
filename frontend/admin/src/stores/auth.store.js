@@ -11,16 +11,11 @@ export const useAuthStore = defineStore({
     }),
     actions: {
         async login(user) {
-            try {
-                this.user = await authService.login(user)
-                localStorage.setItem("user", JSON.stringify(this.user))
-                this.startRefreshTokenTimer();
-                router.push("/")
-                return this.user
-            } catch (error) {
-                console.log(error);
-                return error
-            }
+            this.user = await authService.login(user)
+            localStorage.setItem("user", JSON.stringify(this.user))
+            this.startRefreshTokenTimer();
+            router.push("/")
+            return this.user
         },
         async logout() {
             try {
@@ -37,8 +32,13 @@ export const useAuthStore = defineStore({
             try {
                 const result = await authService.refreshToken(this.user.refreshToken)
                 this.user.accessToken = result.accessToken
+                localStorage.setItem("user", JSON.stringify(this.user))
+                this.startRefreshTokenTimer();
+
             } catch (err) {
-                console.log(err);
+                this.user = null
+                localStorage.removeItem('user');
+                console.log("Expired refresh token");
             }
         },
         startRefreshTokenTimer() {
