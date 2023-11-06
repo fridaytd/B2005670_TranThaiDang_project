@@ -4,10 +4,12 @@ function verifyToken(req, res, next) {
 
     const authorizationHeader = req.headers['authorization']
     if (!authorizationHeader) {
+        console.log("No header");
         return res.sendStatus(401)
     }
     const accessToken = authorizationHeader.split(' ')[1]
     if (!accessToken) {
+        console.log("no acc");
         return res.sendStatus(401)
     }
     try {

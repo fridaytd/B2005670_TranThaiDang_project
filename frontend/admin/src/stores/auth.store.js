@@ -14,7 +14,7 @@ export const useAuthStore = defineStore({
             this.user = await authService.login(user)
             localStorage.setItem("user", JSON.stringify(this.user))
             this.startRefreshTokenTimer();
-            router.push("/")
+            router.push(this.returnURL || "/")
             return this.user
         },
         async logout() {

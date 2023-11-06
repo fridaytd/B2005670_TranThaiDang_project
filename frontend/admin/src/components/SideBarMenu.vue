@@ -1,26 +1,28 @@
-<script setup></script>
+<script setup>
+import { RouterLink } from 'vue-router';
+</script>
 
 <template>
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3 sidebar-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item" style="color: #0C713D">
-                    <span class="nav-link active" style="color: #0C713D" aria-current="page" href="/User/Profile">
+                    <router-link class="nav-link active" style="color: #0C713D" aria-current="page" to="/profile">
                         <span data-feather="home" class="align-text-bottom"></span>
                         Profile
-                    </span>
+                    </router-link>
                 </li>
                 <li class="nav-item" style="color: #0C713D">
-                    <span class="nav-link" style="color: #0C713D" href="/User/Order">
+                    <router-link class="nav-link" style="color: #0C713D" to="/orders">
                         <span data-feather="file" class="align-text-bottom"></span>
                         Orders
-                    </span>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <span class="nav-link" style="color: #0C713D">
+                    <router-link class="nav-link" style="color: #0C713D" to="/products">
                         <span data-feather="shopping-cart" class="align-text-bottom"></span>
                         Products
-                    </span>
+                    </router-link>
                 </li>
                 <!-- 
                         <li class="nav-item">
