@@ -31,7 +31,7 @@ function add() {
 }
 
 function sub() {
-    quantity.value = quantity.value > 0 ? quantity.value - 1 : 0
+    quantity.value = quantity.value > 1 ? quantity.value - 1 : 1
 }
 
 function addCart() {

@@ -6,6 +6,8 @@ const morgan = require('morgan')
 const { verifyToken } = require('./src/middlewares/auth.middleware')
 
 const productRouter = require("./src/routers/product.router")
+const userRouter = require("./src/routers/user.router")
+const orderRouter = require("./src/routers/order.router")
 
 
 const app = express()
@@ -18,6 +20,8 @@ app.use(morgan("combined"))
 app.use("/public", express.static(path.join(__dirname, 'public')))
 
 app.use("/products", productRouter)
+app.use("/user", userRouter)
+app.use("/orders", orderRouter)
 
 // app.get('/', (req, res) => {
 //     res.status(200).send('Hello world')

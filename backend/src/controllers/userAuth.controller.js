@@ -55,7 +55,7 @@ async function refreshToken(req, res) {
     try {
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         const accessToken = jwt.sign({ id: user._id, username: user.username, role: "user" }, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "5m"
+            expiresIn: "1h"
         })
         return res.status(200).json({ accessToken })
     } catch (err) {
@@ -132,10 +132,10 @@ async function register(req, res) {
 function generateToken(user) {
     const tokens = {
         accessToken: jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "5m"
+            expiresIn: "1h"
         }),
         refreshToken: jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: "2h"
+            expiresIn: "1d"
         })
     }
     return tokens

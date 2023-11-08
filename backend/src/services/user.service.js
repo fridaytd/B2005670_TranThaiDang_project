@@ -42,6 +42,19 @@ class UserService {
             refreshToken: refreshToken
         })
     }
+
+    async getUserAddress(id) {
+        return (await this.db.findById(id)).address
+    }
+
+    async addUserAddress(id, address) {
+        const allAddress = await this.getUserAddress(id)
+        allAddress.push(address)
+        await this.db.findOneAndUpdate({ _id: ObjectId.isValid(id) ? new ObjectId(id) : null }, {
+            address: allAddress,
+        })
+        return await this.getUserAddress(id)
+    }
 }
 
 module.exports = UserService

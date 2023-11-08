@@ -25,7 +25,7 @@ const productsOfType = computed(() => {
         <div class="row">
             <div class="col-lg-3 col-md-4 col-6" v-for="product in productsOfType">
                 <ProductCard :productId="product._id" :image_url="product.image_url" :name="product.name"
-                    :price="product.price" :description="product.description"></ProductCard>
+                    :price="product.price" :description="product.description" :type="product.type"></ProductCard>
             </div>
         </div>
 

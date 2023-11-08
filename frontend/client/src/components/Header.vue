@@ -1,11 +1,22 @@
 <script setup>
-import router from '../../../admin/src/router';
+import router from '../router/index';
 import { useAuthStore } from '../stores/authStore';
 import { useCartStore } from '../stores/cart.store';
+import { useRoute } from "vue-router"
 
 const authStore = useAuthStore()
 const cartStore = useCartStore()
+const route = useRoute()
 
+async function changeAndLogout() {
+    await authStore.logout()
+    if (route.meta.requireAuth) {
+        router.push({
+            path: "/login"
+        })
+    }
+
+}
 </script>
 
 <template>
@@ -46,12 +57,12 @@ const cartStore = useCartStore()
                             <span class="me-2" style="color: white;">Xin chào, {{ authStore.user.username }}</span>
                         </a>
                         <ul class="dropdown-menu text-small" style="">
-                            <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                            <li><router-link to="/order" class="dropdown-item" href="#">Đơn hàng</router-link></li>
                             <li><a class="dropdown-item" href="#">Thông tin</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><span class="" @click="authStore.logout()">Đăng
+                            <li><a class="dropdown-item" href="#"><span class="" @click="changeAndLogout">Đăng
                                         xuất</span></a></li>
                         </ul>
                     </div>
