@@ -95,6 +95,12 @@ async function register(req, res) {
     } else if (user.password.length < 8 || user.password.length > 30) {
         error.password = "The length of password must be between 8 and 30 characters"
     }
+    // Validate password again
+    if (!user.passwordagain) {
+        error.passwordagain = "Missing password again"
+    } else if (user.password != user.passwordagain) {
+        error.passwordagain = "Password again and password must be the same"
+    }
 
     // Validate phone
     if (!user.phone) {
@@ -106,6 +112,7 @@ async function register(req, res) {
     }
 
     if (Object.keys(error).length > 0) {
+        console.log(error);
         return res.status(400).json({
             error: error
         })
