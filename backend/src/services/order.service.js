@@ -9,6 +9,10 @@ class OrderService {
     async addOrder(order) {
         return await this.db.create(order)
     }
+
+    async getOrder(userId) {
+        return await this.db.find({ userId: userId });
+    }
 }
 
 module.exports = OrderService

@@ -15,6 +15,24 @@ class OrderService {
             }
         }))
     }
+
+    async getOrder() {
+        const authStore = useAuthStore()
+        return (await axios.get(baseURL, {
+            headers: {
+                "Authorization": "Beare " + authStore.user.accessToken
+            }
+        })).data
+    }
+
+    async getOrderDetail(orderId) {
+        const authStore = useAuthStore();
+        return (await axios.get(`${baseURL}/${orderId}`, {
+            headers: {
+                "Authorization": "Beare " + authStore.user.accessToken
+            }
+        })).data
+    }
 }
 
 export default new OrderService()

@@ -49,7 +49,7 @@ function addCart() {
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                 :data-bs-target="'#model' + props.productId">
-                Đặt hàng
+                Thêm vào giỏ
             </button>
         </div>
     </div>
@@ -95,7 +95,7 @@ function addCart() {
                             </tr>
                         </table>
                         <button class="btn btn-outline-primary" data-bs-dismiss="modal" aria-label="Close"
-                            @click="addCart">Đặt hàng</button>
+                            @click="addCart">Thêm vào giỏ</button>
 
 
                     </div>

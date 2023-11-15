@@ -49,6 +49,30 @@ async function addOrder(req, res) {
     }
 }
 
+async function getOrder(req, res) {
+    const userId = req.id
+    try {
+        const orderResult = await orderService.getOrder(userId)
+        res.status(200).json(orderResult);
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+async function getOrderDetail(req, res) {
+    const orderId = req.params.orderId
+    try {
+        const orderDetailResult = await orderDetailService.getManyOrderDetail(orderId)
+        res.status(200).json(orderDetailResult)
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     addOrder,
+    getOrder,
+    getOrderDetail,
 }

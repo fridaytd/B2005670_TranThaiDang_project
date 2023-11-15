@@ -9,6 +9,10 @@ class OrderDetailService {
     async addManyOrderDetail(manyOrderDetail) {
         return await this.db.insertMany(manyOrderDetail)
     }
+
+    async getManyOrderDetail(orderId) {
+        return await this.db.find({ orderId: orderId })
+    }
 }
 
 module.exports = OrderDetailService

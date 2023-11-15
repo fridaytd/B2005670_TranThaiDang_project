@@ -6,6 +6,10 @@ class ProductService {
     async getAllProducts() {
         return (await axios.get(baseURL)).data
     }
+
+    async getProduct(productId) {
+        return (await axios.get(`${baseURL}/${productId}`)).data
+    }
 }
 
 export default new ProductService()
