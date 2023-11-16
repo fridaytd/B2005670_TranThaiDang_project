@@ -2,11 +2,13 @@
 import { ref } from 'vue';
 import { Toaster, toast } from 'vue-sonner'
 import { useCartStore } from '../stores/cart.store';
+import { useSocketStore } from '../stores/socket.store';
 import CartProductCard from '../components/CartProductCard.vue';
 import userService from "../services/user.service"
 import orderService from '../services/order.service';
 
 const cartStore = useCartStore()
+const socketStore = useSocketStore()
 
 const newAddress = ref(null)
 const newAddressError = ref(null)
@@ -71,6 +73,7 @@ async function order() {
         cartStore.clear()
         address.value = null
         note.value = null
+        socketStore.io.emit('order')
     } catch (err) {
         console.log(err);
         toast.error("Đặt hàng không thành công")

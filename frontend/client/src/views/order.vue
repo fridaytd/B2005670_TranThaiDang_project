@@ -1,33 +1,63 @@
 <script setup>
-import { ref, watch } from "vue"
+import { ref, watch, nextTick } from "vue"
+import { Toaster, toast } from "vue-sonner"
 import orderService from "../services/order.service"
 import OrderCard from "../components/OrderCard.vue";
+import { useSocketStore } from "../stores/socket.store";
+
+const socketStore = useSocketStore()
+
+socketStore.io.on('updateStatus', async () => {
+    toast.warning("Có đơn hàng thay đổi trạng thái")
+    await fetchOrder()
+})
+
 const orders = ref()
 const status = ref('all')
-try {
-    orders.value = await orderService.getOrder()
-    await orders.value.sort((a, b) => {
-        return (new Date(b.orderTime)) - (new Date(a.orderTime))
-    })
-} catch (err) {
-    console.log(err);
+const renderComponent = ref(true)
+
+async function fetchOrder() {
+    try {
+        orders.value = await orderService.getOrder()
+        await orders.value.sort((a, b) => {
+            return (new Date(b.orderTime)) - (new Date(a.orderTime))
+        })
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-let ordersFilted = orders
+let ordersFilted = orders.value
 
-watch(status, (value) => {
+watch(orders, async (value) => {
+    renderComponent.value = false
+    await nextTick()
+    if (status.value == 'all') {
+        ordersFilted = orders.value
+    } else {
+        ordersFilted = orders.value.filter((order) => order.status == status.value)
+    }
+    renderComponent.value = true
+})
+
+watch(status, async (value) => {
+    renderComponent.value = false
+    await nextTick()
     if (value == 'all') {
         ordersFilted = orders.value
     } else {
         ordersFilted = orders.value.filter((order) => order.status == value)
     }
+    renderComponent.value = true
 })
 
+fetchOrder()
 
 
 </script>
 
 <template>
+    <Toaster richColors />
     <div class="container mt-5">
         <div class="row">
             <h1>Tổng số đơn hàng: {{ orders.length }}</h1>
@@ -56,7 +86,7 @@ watch(status, (value) => {
                         <th scope="col">Thời gian giao</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="renderComponent">
                     <OrderCard :order="order" v-for="order in ordersFilted"></OrderCard>
                 </tbody>
             </table>

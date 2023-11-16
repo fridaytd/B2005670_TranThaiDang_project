@@ -34,7 +34,20 @@ async function addUserAddress(req, res) {
     }
 }
 
+async function getUserById(req, res) {
+    const userId = req.params.userId
+    try {
+        const result = await userService.findById(userId)
+
+        res.status(200).json(result)
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getUserAddress,
     addUserAddress,
+    getUserById,
 }

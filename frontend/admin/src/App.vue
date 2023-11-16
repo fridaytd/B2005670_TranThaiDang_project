@@ -1,5 +1,13 @@
 <script setup>
-import router from './router';
+import { useSocketStore } from "./stores/socket.store";
+import { onBeforeMount, onBeforeUnmount } from "vue"
+const socketStore = useSocketStore()
+onBeforeMount(() => {
+    socketStore.connect()
+})
+onBeforeUnmount(() => {
+    socketStore.disconnect()
+})
 </script>
 
 <template>

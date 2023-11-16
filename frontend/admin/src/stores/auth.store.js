@@ -34,7 +34,6 @@ export const useAuthStore = defineStore({
                 this.user.accessToken = result.accessToken
                 localStorage.setItem("user", JSON.stringify(this.user))
                 this.startRefreshTokenTimer();
-
             } catch (err) {
                 this.user = null
                 localStorage.removeItem('user');

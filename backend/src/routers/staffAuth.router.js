@@ -9,6 +9,6 @@ staffAuthRouter
     .post('/login', staffAuthController.login)
     .post('/register', staffAuthController.register)
     .post('/refresh', staffAuthController.refreshToken)
-    .post('/logout', verifyToken, staffAuthController.logout)
+    .post('/logout', verifyToken('staff'), staffAuthController.logout)
 
 module.exports = staffAuthRouter

@@ -13,6 +13,18 @@ class OrderService {
     async getOrder(userId) {
         return await this.db.find({ userId: userId });
     }
+
+    async getAllOrder() {
+        return await this.db.find({})
+    }
+
+    async updateOrderStatus(orderId, status) {
+        return await this.db.findOneAndUpdate({
+            _id: ObjectId.isValid(orderId) ? new ObjectId(orderId) : ""
+        }, {
+            status: status,
+        })
+    }
 }
 
 module.exports = OrderService

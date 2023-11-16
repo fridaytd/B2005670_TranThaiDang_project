@@ -9,7 +9,7 @@ const productRouter = express.Router()
 productRouter
     .get("/", productController.getAllProducts)
     .get("/:productId", productController.getProduct)
-    .use(verifyToken)
+    .use(verifyToken('staff'))
     .post("/", upload.single("image"), productController.addProduct)
     .delete("/:productId", productController.deleteProduct)
     .put("/:productId", upload.single("image"), productController.updateProduct)

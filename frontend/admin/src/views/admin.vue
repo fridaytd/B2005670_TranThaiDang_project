@@ -14,7 +14,12 @@ const authStore = useAuthStore()
         <div class="row">
             <SideBarMenu></SideBarMenu>
             <main class="col-md-9  col-lg-10  mt-2" style="min-height: 600px">
-                <router-view></router-view>
+                <Suspense>
+                    <template #default> <router-view></router-view></template>
+                    <template #fallback>
+                        Loadding ...
+                    </template>
+                </Suspense>
             </main>
         </div>
     </div>
