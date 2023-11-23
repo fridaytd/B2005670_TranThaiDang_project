@@ -17,24 +17,9 @@ const status = {
 }
 
 const props = defineProps(['order'])
-const detail = ref()
-// let sumMoney = 0
-try {
 
-    props.order.user = (await userService.getUserById(props.order.userId))
-    detail.value = await orderService.getOrderDetail(props.order._id)
-    detail.value = await Promise.all(detail.value.map(async (value) => {
-        return {
-            ...value,
-            ...(await productService.getProducts(value.productId)),
-        }
-    }))
 
-} catch (err) {
-    console.log(err);
-}
-
-const sumMoney = computed(() => detail.value.reduce((sum, current) => sum += current.price * current.quantity, 0))
+const sumMoney = computed(() => props.order.detail.reduce((sum, current) => sum += current.price * current.quantity, 0))
 
 
 const formatPrice = (price) => {
@@ -72,14 +57,17 @@ async function changeStatus(orderStatus) {
     <!-- Button trigger modal -->
     <tr data-bs-toggle="modal" :data-bs-target="`#Modal${order._id}`">
         <th scope="row">...{{ order._id.substr(order._id.length - 5) }}</th>
-        <td>{{ order.user.fullname }}</td>
-        <td>{{ detail.length }}</td>
+        <td>{{ order.user }}</td>
+        <td>{{ order.staff }}</td>
+        <td>{{ order.detail.length }}</td>
         <td>{{ formatPrice(sumMoney) }}đ</td>
         <td>{{ status[order.status] }}</td>
         <td>{{ (new Date(order.orderTime)).toLocaleDateString() }} {{ (new Date(order.orderTime)).toLocaleTimeString()
         }}
         </td>
-        <td>null</td>
+        <td>{{ order.updateTime ? ((new Date(order.updateTime)).toLocaleDateString() + ' ' + (new
+            Date(order.updateTime)).toLocaleTimeString()) : ((new Date(order.orderTime)).toLocaleDateString() + ' ' + (new
+                Date(order.orderTime)).toLocaleTimeString()) }}</td>
     </tr>
 
 
@@ -92,12 +80,13 @@ async function changeStatus(orderStatus) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h3>Khách hàng: {{ order.user.fullname }}</h3>
+                    <h3>Khách hàng: {{ order.user }}</h3>
                     <h4>Chi tiết đơn hàng</h4>
                     <hr class="my-4">
-                    <OrderDetailCard v-for="d in detail" :detail="d"></OrderDetailCard>
+                    <OrderDetailCard v-for="d in order.detail" :detail="d"></OrderDetailCard>
                     <h5 class="h5">Tổng cộng: {{ formatPrice(sumMoney) }}đ</h5>
                     <h5 class="h5">Trạng thái:</h5>
+                    <h5 class="h5">Nhân viên: {{ order.staff }}</h5>
                     <div class="col-3 my-2">
                         <select v-model="orderStatus" class="form-select" aria-label="Default select example">
                             <option value="processing">Đang xử lý</option>
@@ -108,6 +97,9 @@ async function changeStatus(orderStatus) {
                         </select>
                     </div>
                     <div>Địa chỉ: {{ order.address }}</div>
+                    <div>Số điện thoại: {{ order.phone }}</div>
+                    <div>Ghi chú</div>
+                    <textarea class="form-control" name="" id="" cols="30" rows="3" disabled>{{ order.note }}</textarea>
                 </div>
                 <div class="modal-footer">
                     <button :id="`close${props.order._id}`" type="button" class="btn btn-secondary"

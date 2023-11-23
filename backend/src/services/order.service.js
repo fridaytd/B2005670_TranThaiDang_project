@@ -18,11 +18,13 @@ class OrderService {
         return await this.db.find({})
     }
 
-    async updateOrderStatus(orderId, status) {
+    async updateOrderStatus(orderId, status, staffId) {
         return await this.db.findOneAndUpdate({
-            _id: ObjectId.isValid(orderId) ? new ObjectId(orderId) : ""
+            _id: ObjectId.isValid(orderId) ? new ObjectId(orderId) : "",
         }, {
             status: status,
+            staffId: staffId,
+            updateTime: Date.now()
         })
     }
 }

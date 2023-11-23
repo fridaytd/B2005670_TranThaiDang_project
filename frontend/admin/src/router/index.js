@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router"
+import { nextTick } from "vue"
 
 import Admin from "../views/admin.vue"
 import LoginView from "../views/login.vue"
@@ -23,6 +24,7 @@ const routes = [
         children: [
             {
                 path: "/profile",
+                name: "Profile",
                 component: Profile
             },
             {
@@ -31,15 +33,18 @@ const routes = [
                 children: [
                     {
                         path: "/products",
+                        name: "Products",
                         component: AllProducts
 
                     },
                     {
                         path: "/products/add",
+                        name: "Add Products",
                         component: AddProduct,
                     },
                     {
                         path: "/products/edit/:id",
+                        name: "Edit products",
                         component: EditProducts,
                         props: true,
                     }
@@ -47,6 +52,7 @@ const routes = [
             },
             {
                 path: "/orders",
+                name: "Orders",
                 component: Orders
             },
         ]
@@ -74,6 +80,12 @@ router.beforeEach(async (to) => {
             path: "/login",
         }
     }
+})
+
+router.afterEach((to, from) => {
+    nextTick(() => {
+        document.title = to.name
+    })
 })
 
 export default router;

@@ -8,6 +8,7 @@ const { verifyToken } = require('./src/middlewares/auth.middleware')
 const productRouter = require("./src/routers/product.router")
 const userRouter = require("./src/routers/user.router")
 const orderRouter = require("./src/routers/order.router")
+const staffRouter = require("./src/routers/staff.route")
 
 
 const app = express()
@@ -21,6 +22,7 @@ app.use("/public", express.static(path.join(__dirname, 'public')))
 
 app.use("/products", productRouter)
 app.use("/user", userRouter)
+app.use("/staff", staffRouter)
 app.use("/orders", orderRouter)
 
 // app.get('/', (req, res) => {

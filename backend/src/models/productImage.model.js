@@ -15,4 +15,4 @@ const productImageSchema = mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("ProductImage", productImageSchema)
+module.exports = mongoose.model("productimages", productImageSchema)

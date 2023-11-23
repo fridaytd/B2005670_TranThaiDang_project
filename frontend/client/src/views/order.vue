@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, nextTick } from "vue"
+import { ref, watch, nextTick, onBeforeMount } from "vue"
 import { Toaster, toast } from "vue-sonner"
 import orderService from "../services/order.service"
 import OrderCard from "../components/OrderCard.vue";
@@ -51,7 +51,7 @@ watch(status, async (value) => {
     renderComponent.value = true
 })
 
-fetchOrder()
+onBeforeMount(() => fetchOrder())
 
 
 </script>
@@ -60,7 +60,7 @@ fetchOrder()
     <Toaster richColors />
     <div class="container mt-5">
         <div class="row">
-            <h1>Tổng số đơn hàng: {{ orders.length }}</h1>
+            <h1>Tổng số đơn hàng: {{ orders ? orders.length : 0 }}</h1>
         </div>
         <div class="row my-4">
             <div class="col-4">
@@ -75,7 +75,7 @@ fetchOrder()
             </div>
         </div>
         <div class="row">
-            <table class="table">
+            <table class="table table-hover table-fixed">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -83,7 +83,8 @@ fetchOrder()
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Thời gian đặt</th>
-                        <th scope="col">Thời gian giao</th>
+                        <th scope="col">Cập nhật lúc</th>
+                        <th scope="col">Nhân viên</th>
                     </tr>
                 </thead>
                 <tbody v-if="renderComponent">

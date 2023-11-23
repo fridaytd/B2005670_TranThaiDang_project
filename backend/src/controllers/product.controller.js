@@ -4,7 +4,6 @@ const StaffService = require("../services/staff.service")
 
 const path = require("path")
 const fs = require("fs")
-const { log } = require("console")
 
 const productService = new ProductService()
 const productImageService = new ProductImageService()
@@ -87,6 +86,7 @@ async function getAllProducts(req, res) {
             const staff = await staffService.findById(product.creator)
             product.creator = staff.fullname;
             const productImage = await productImageService.findByProductId(product._id)
+
             product.image_url = productImage.url
             // console.log(product);
             return product;

@@ -3,10 +3,12 @@ import router from '../router/index';
 import { useAuthStore } from '../stores/authStore';
 import { useCartStore } from '../stores/cart.store';
 import { useRoute } from "vue-router"
+import { ref } from "vue"
 
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const route = useRoute()
+const keyWord = ref()
 
 async function changeAndLogout() {
     await authStore.logout()
@@ -16,6 +18,15 @@ async function changeAndLogout() {
         })
     }
 
+}
+
+async function search() {
+    if (!keyWord.value) {
+        return
+    }
+    router.push({
+        path: `/search/products/${keyWord.value}`
+    })
 }
 </script>
 
@@ -40,8 +51,9 @@ async function changeAndLogout() {
                     <li><a href="#" class="nav-link px-2 text-white btn btn-success routerlink">Về chúng tôi</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control " placeholder="Tìm kiếm..." aria-label="Search">
+                <form @submit.prevent="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control " placeholder="Tìm kiếm..." aria-label="Search"
+                        v-model="keyWord">
                 </form>
 
                 <div v-if="!authStore.user" class="text-end">
@@ -57,8 +69,8 @@ async function changeAndLogout() {
                             <span class="me-2" style="color: white;">Xin chào, {{ authStore.user.username }}</span>
                         </a>
                         <ul class="dropdown-menu text-small" style="">
-                            <li><router-link to="/order" class="dropdown-item" href="#">Đơn hàng</router-link></li>
-                            <li><a class="dropdown-item" href="#">Thông tin</a></li>
+                            <li><router-link to="/order" class="dropdown-item">Đơn hàng</router-link></li>
+                            <li><router-link to="/profile" class="dropdown-item">Thông tin</router-link></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

@@ -55,6 +55,34 @@ class UserService {
         })
         return await this.getUserAddress(id)
     }
+
+    async removeUserAddress(userId, address) {
+        let allAddress = await this.getUserAddress(userId)
+        allAddress = allAddress.filter((add) => add != address)
+        await this.db.findOneAndUpdate({
+            _id: ObjectId.isValid(userId) ? new ObjectId(userId) : ""
+        }, {
+            address: allAddress
+        })
+        return await this.getUserAddress(userId)
+    }
+
+    async updateUserInfor(userId, fullname, phone) {
+        return await this.db.findByIdAndUpdate({
+            _id: ObjectId.isValid(userId) ? new ObjectId(userId) : ''
+        }, {
+            fullname: fullname,
+            phone: phone
+        })
+    }
+
+    async changePassword(userId, newPassword) {
+        return await this.db.findOneAndUpdate({
+            _id: ObjectId.isValid(userId) ? new ObjectId(userId) : ""
+        }, {
+            password: newPassword,
+        })
+    }
 }
 
 module.exports = UserService

@@ -13,7 +13,7 @@ const orderSchema = mongoose.Schema({
         type: Date,
         require: true,
     },
-    deliveryTime: {
+    updateTime: {
         type: Date
     },
     address: {

@@ -4,6 +4,18 @@ const orderService = new OrderService()
 const OrderDetailService = require("../services/orderDetail.service")
 const orderDetailService = new OrderDetailService()
 
+const UserService = require('../services/user.service')
+const userService = new UserService()
+
+const StaffService = require('../services/staff.service')
+const staffService = new StaffService()
+
+const ProductService = require('../services/product.service')
+const productService = new ProductService()
+
+const ProductImageService = require('../services/productImage.service')
+const productImageService = new ProductImageService()
+
 async function addOrder(req, res) {
     const error = {}
     const userId = req.id
@@ -53,7 +65,22 @@ async function getOrder(req, res) {
     const userId = req.id
     try {
         const orderResult = await orderService.getOrder(userId)
-        res.status(200).json(orderResult);
+        const final = await Promise.all(orderResult.map(async (order) => {
+            let details = await orderDetailService.getManyOrderDetail(order._id);
+            details = await Promise.all(details.map(async (detail) => {
+                return {
+                    ...detail._doc,
+                    ...(await productService.findById(detail.productId))._doc,
+                    image_url: (await productImageService.findByProductId(detail.productId)).url
+                }
+            }))
+            return {
+                ...order._doc,
+                detail: details,
+                staff: await order.staffId ? (await staffService.findById(order.staffId)).fullname : ''
+            }
+        }))
+        res.status(200).json(final);
     } catch (err) {
         console.log(err);
         res.sendStatus(500);
@@ -73,8 +100,29 @@ async function getOrderDetail(req, res) {
 
 async function getAllOrders(req, res) {
     try {
-        const allOrderResult = await orderService.getAllOrder()
-        res.status(200).json(allOrderResult)
+        const allOrderResult = await orderService.getAllOrder();
+        const final = await Promise.all(allOrderResult.map(async (order) => {
+            const details = await orderDetailService.getManyOrderDetail(order._id)
+            order.detail = await Promise.all(details.map(async (detail) => {
+                return {
+                    ...detail._doc,
+                    ...(await productService.findById(detail.productId))._doc,
+                    image_url: (await productImageService.findByProductId(detail.productId)).url
+                }
+            }))
+            const user = await userService.findById(order.userId)
+            order.user = user.fullname
+            order.phone = user.phone
+            order.staff = await order.staffId ? (await staffService.findById(order.staffId)).fullname : ''
+            return {
+                ...order._doc,
+                detail: order.detail,
+                user: order.user,
+                staff: order.staff,
+                phone: order.phone
+            };
+        }))
+        res.status(200).json(final)
     } catch (err) {
         console.log(err);
         res.sendStatus(500)
@@ -84,8 +132,9 @@ async function getAllOrders(req, res) {
 async function updateOrderStatus(req, res) {
     const orderId = req.body.orderId
     const followingStatus = req.body.status
+    const staffId = req.id
     try {
-        const result = await orderService.updateOrderStatus(orderId, followingStatus)
+        const result = await orderService.updateOrderStatus(orderId, followingStatus, staffId)
         res.status(200).json(result)
     } catch (err) {
         console.log(err);

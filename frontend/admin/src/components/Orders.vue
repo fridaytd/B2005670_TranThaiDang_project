@@ -26,7 +26,7 @@ async function fetchOrder() {
     await nextTick()
     try {
         allOrders.value = await orderService.getAllOrder()
-
+        console.log(allOrders.value);
         await allOrders.value.sort((a, b) => {
             return (new Date(b.orderTime)) - (new Date(a.orderTime))
         })
@@ -82,16 +82,17 @@ watch(status, async (value) => {
             </div>
         </div>
         <div class="row">
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Khách hàng</th>
+                        <th scope="col">Nhân viên</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Thời gian đặt</th>
-                        <th scope="col">Thời gian giao</th>
+                        <th scope="col">Cập nhật lúc</th>
                     </tr>
                 </thead>
                 <tbody v-if="renderComponent">

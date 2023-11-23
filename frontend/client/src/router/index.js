@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
+import { nextTick } from "vue"
 
 const routes = [
     {
@@ -36,6 +37,15 @@ const routes = [
         component: () => import("../views/product.vue")
     },
     {
+        path: "/search/products/:keyWord",
+        name: "search",
+        meta: {
+            requireAuth: false,
+        },
+        props: true,
+        component: () => import("../views/searchProduct.vue")
+    },
+    {
         path: "/cart",
         name: "Cart",
         meta: {
@@ -50,6 +60,48 @@ const routes = [
             requireAuth: true,
         },
         component: () => import("../views/order.vue")
+    },
+    {
+        path: "/profile",
+        name: "Profile",
+        meta: {
+            requireAuth: true,
+        },
+        component: () => import("../views/profile.vue"),
+        children: [
+            {
+                path: "/profile",
+                name: "Profile",
+                meta: {
+                    requireAuth: true,
+                },
+                component: () => import("../components/Profile.vue")
+            },
+            {
+                path: "/profile/changeinfor",
+                name: "Change Infor",
+                meta: {
+                    requireAuth: true,
+                },
+                component: () => import("../components/ChangeInfor.vue")
+            },
+            {
+                path: "/profile/changepassword",
+                name: "Change Password",
+                meta: {
+                    requireAuth: true,
+                },
+                component: () => import("../components/ChangePassword.vue")
+            },
+            {
+                path: "/profile/address",
+                name: "Address",
+                meta: {
+                    requireAuth: true,
+                },
+                component: () => import("../components/Address.vue")
+            }
+        ]
     }
 ]
 
@@ -67,6 +119,12 @@ router.beforeEach(async (to, from) => {
             path: "/login",
         }
     }
+})
+
+router.afterEach((to, from) => {
+    nextTick(() => {
+        document.title = to.name
+    })
 })
 
 export default router;
